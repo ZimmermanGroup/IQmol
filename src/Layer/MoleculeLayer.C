@@ -78,6 +78,9 @@
 #include <vector>
 #include <QtDebug>
 
+// JOSH - includes
+#include <QDateTime>
+#include <QThread>
 
 extern "C" void symmol_(int*, double*, double*, int*, char*);
 
@@ -1800,6 +1803,14 @@ void Molecule::addHydrogens()
 
 void Molecule::minimizeEnergy(QString const& forceFieldName)
 {
+   // JOSH - added to save geometry before minimization
+   QDateTime current_time(QDateTime::currentDateTimeUtc());
+   QLOG_DEBUG() << current_time;
+   QString current_time_string(current_time.toString("yyyyMMdd_hhmmss"));
+   QLOG_DEBUG() << current_time_string;
+   QString file_path("/mnt/c/Users/Joshua/Desktop/iqmol_scratch/");
+   writeToFile(file_path + current_time_string + ".mol");
+
    QLOG_DEBUG() << "Minimizing energy with forcefield" << forceFieldName;
    OBPlugin::List("forcefields");
    QByteArray ff(forceFieldName.toLatin1());
